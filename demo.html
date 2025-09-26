@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Starry Wish</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      transition: background 0.7s, color 0.7s;
+      background: linear-gradient(to bottom right, #ffe4ec, #ffffff);
+      color: #9d174d;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    body.dark {
+      background: black;
+      color: white;
+    }
+    .container {
+      text-align: center;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid #fbcfe8;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: background 0.5s, border 0.5s;
+    }
+    body.dark .container {
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+    }
+    .photo {
+      width: 250px;
+      height: 250px;
+      margin: 0 auto 1rem;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      cursor: pointer;
+      position: relative;
+    }
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.5s ease;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .wish {
+      font-family: 'Pacifico', cursive;
+      font-size: 20px;
+      margin-top: 0.5rem;
+    }
+    .toggle-btn {
+      margin-bottom: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      border: 1px solid #e2e8f0;
+      background: white;
+      color: #e11d48;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    body.dark .toggle-btn {
+      background: linear-gradient(90deg,#111827,#0b1221);
+      color: #f8fafc;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    /* Stars */
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.9;
+      filter: drop-shadow(0 0 6px rgba(255,255,255,0.8));
+      animation: twinkle infinite alternate;
+    }
+    @keyframes twinkle {
+      from { opacity: 0.25; transform: scale(0.8); }
+      to   { opacity: 1; transform: scale(1.2); }
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="toggle-btn" onclick="toggleDark()">Lights Off</button>
+    <h1>Twinkle Wishes</h1>
+    <div class="photo" onclick="nextImage()">
+      <img id="photo-display" src="images/photo1.jpg" alt="Wish photo" />
+    </div>
+    <p class="wish">Chúc nhóc ngủ ngon mơ thậc đẹp nhennnnnn ✨</p>
+    <p style="font-size: 12px; opacity: 0.7;">Em click vào ảnh để coi những ảnh khác nha :3 À click "Lights Off" sẽ thấy có bầu trời sao nữa đó hehe.</p>
+  </div>
+
+  <!-- Background music -->
+  <audio id="bg-music" src="musics/chamhoa.mp3" autoplay loop hidden></audio>
+
+  <script>
+    const body = document.body;
+    const btn = document.querySelector('.toggle-btn');
+    const photoDisplay = document.getElementById('photo-display');
+
+    // Array of local images
+    const photos = [
+      "images/photo1.jpg",
+      "images/photo2.jpg",
+      "images/photo3.jpg"
+    ];
+    let currentIndex = 0;
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % photos.length;
+      photoDisplay.style.opacity = 0;
+      setTimeout(() => {
+        photoDisplay.src = photos[currentIndex];
+        photoDisplay.style.opacity = 1;
+      }, 300);
+    }
+
+    function toggleDark() {
+      body.classList.toggle('dark');
+      if (body.classList.contains('dark')) {
+        btn.textContent = 'Lights On';
+        createStars();
+      } else {
+        btn.textContent = 'Lights Off';
+        removeStars();
+      }
+    }
+
+    function createStars() {
+      for (let i = 0; i < 60; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 2 + 1;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${Math.random() * 100}vw`;
+        star.style.top = `${Math.random() * 100}vh`;
+        star.style.animationDuration = `${2 + Math.random() * 4}s`;
+        star.style.animationDelay = `${Math.random() * 6}s`;
+        document.body.appendChild(star);
+      }
+    }
+
+    function removeStars() {
+      document.querySelectorAll('.star').forEach(star => star.remove());
+    }
+  </script>
+</body>
+</html>
